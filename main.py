@@ -8,7 +8,7 @@ def lineupBuilder (thisWeeksFile):
     ROOT_DIR = os.path.dirname(__file__)
     thisWeeksFile
 
-    df = pd.read_csv(os.path.join(ROOT_DIR, thisWeeksFile))
+    df = pd.read_csv(os.path.join(ROOT_DIR, 'input', thisWeeksFile))
     df[['team', 'gameTime']] = df['Game Info'].str.split('@', expand=True)
     df[['opp', 'date', 'time', 'timezone']] = df['gameTime'].str.split(' ', expand=True); 
 
@@ -99,7 +99,7 @@ def lineupBuilder (thisWeeksFile):
         
 
         solutions[['player1', 'player2','player3', 'player4', 'player5','player6','player7','player8','player9']] = pd.DataFrame(solutions.Lineup.tolist())
-        solutions.to_csv(thisWeeksFile + '_lineups.csv')
+        solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile + '_lineups.csv'))
         print(solutions)
 
 
