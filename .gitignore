@@ -1,1 +1,3 @@
-output/DKSalaries_09112022_custom-points.csv
+input/DKSalaries_09112022_custom-points.csv
+test.py
+.gitignore

@@ -7,7 +7,7 @@ from pulp import *
 def lineupBuilder (thisWeeksFile):
     ROOT_DIR = os.path.dirname(__file__)
     thisWeeksFile
-
+    
     df = pd.read_csv(os.path.join(ROOT_DIR, 'input', thisWeeksFile))
     df[['team', 'gameTime']] = df['Game Info'].str.split('@', expand=True)
     df[['opp', 'date', 'time', 'timezone']] = df['gameTime'].str.split(' ', expand=True); 
@@ -15,14 +15,18 @@ def lineupBuilder (thisWeeksFile):
 
     salaries = {}
     scores = {}
+    teams = {}
 
     for pos in df.Position.unique():
         available_pos = df[df.Position == pos]
         salary = list(available_pos [['Name + ID', 'Salary']].set_index('Name + ID').to_dict().values())[0]
         score = list(available_pos [['Name + ID', 'AvgPointsPerGame']].set_index('Name + ID').to_dict().values())[0]
+
         
         salaries[pos] = salary
         scores[pos] = score
+
+
 
 
     pos_num_available = {
@@ -99,7 +103,7 @@ def lineupBuilder (thisWeeksFile):
         
 
         solutions[['player1', 'player2','player3', 'player4', 'player5','player6','player7','player8','player9']] = pd.DataFrame(solutions.Lineup.tolist())
-        solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile + '_lineups.csv'))
+        solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile[:-4] + '_lineups.csv'))
         print(solutions)
 
 
