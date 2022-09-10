@@ -15,18 +15,14 @@ def lineupBuilder (thisWeeksFile):
 
     salaries = {}
     scores = {}
-    teams = {}
-
+  
     for pos in df.Position.unique():
         available_pos = df[df.Position == pos]
         salary = list(available_pos [['Name + ID', 'Salary']].set_index('Name + ID').to_dict().values())[0]
         score = list(available_pos [['Name + ID', 'AvgPointsPerGame']].set_index('Name + ID').to_dict().values())[0]
 
-        
         salaries[pos] = salary
         scores[pos] = score
-
-
 
 
     pos_num_available = {
