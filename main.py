@@ -13,50 +13,25 @@ def lineupBuilder (thisWeeksFile):
     df[['opp', 'date', 'time', 'timezone']] = df['gameTime'].str.split(' ', expand=True); 
     df.set_index('Name')
     
-    
-
-
-    # salaries = {}
-    # scores = {}
-  
-    # for pos in df.Position.unique():
-    #     available_pos = df[df.Position == pos]
-    #     salary = list(available_pos [['Name + ID', 'Salary']].set_index('Name + ID').to_dict().values())[0]
-    #     score = list(available_pos [['Name + ID', 'AvgPointsPerGame']].set_index('Name + ID').to_dict().values())[0]
-
-    #     salaries[pos] = salary
-    #     scores[pos] = score
-
-
-    # pos_num_available = {
-    #     "QB": 1,
-    #     "RB": 2,
-    #     "WR": 3,
-    #     "TE": 1,
-    #     "FLEX" : 1,
-    #     "DST" : 1
-    # }
-
-    # flexible_positions = ("RB", "WR", "TE")
-
-    # SALARY_CAP = 50000
 
     lineup = 1
     score_check = 1000
     solutions = pd.DataFrame()
     while score_check >= 150:
 
-
         player_ids = df.index
-        print(player_ids)
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')
-
         prob = LpProblem ("Fantasy", LpMaximize)
-
 
         rewards = lpSum([df['AvgPointsPerGame'][i] * player_vars[i] for i in player_ids])
         prob += lpSum([df['Salary'][i] * player_vars[i] for i in player_ids]) <= 50000
         prob += lpSum([player_vars[i] for i in player_ids]) == 9
+
+        for qbid in player_ids:
+            if df['Position'][qbid] == 'QB':
+                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['TeamAbbrev'][qbid] and df['Position'][i] in ('WR', 'TE', 'RB'))] + [-3*player_vars[qbid]]) >= 0
+
+
         prob += lpSum([player_vars[i] for i in player_ids if df['Position'][i] == 'QB']) == 1
         prob += lpSum([player_vars[i] for i in player_ids if df['Position'][i] == 'DST']) == 1
         prob += lpSum([player_vars[i] for i in player_ids if df['Position'][i] == 'RB']) >= 2
@@ -69,10 +44,11 @@ def lineupBuilder (thisWeeksFile):
         if not lineup == 1:
             prob += lpSum(rewards) <= total_score - .001
 
-        
+
+
+                
 
         prob.solve(PULP_CBC_CMD(msg=0))
-
 
         solution_status = LpStatus[prob.status]
         lineup_score =  value(prob.objective)
