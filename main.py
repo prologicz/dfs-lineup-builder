@@ -28,7 +28,7 @@ def lineupBuilder (thisWeeksFile):
 
     
     #LP Optimzation loop, Modify while loop between lineup or scorecheck depending on requirements
-    while score_check >= 150:
+    while lineup < 50:
 
         player_ids = df.index
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')
@@ -41,7 +41,7 @@ def lineupBuilder (thisWeeksFile):
         # Constrained by teamates and/or opponents with QB
         for qbid in player_ids:
             if df['Position'][qbid] == 'QB':
-                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['TeamAbbrev'][qbid] and df['Position'][i] in ('WR', 'TE', 'RB'))] + [-5*player_vars[qbid]]) >= 0
+                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['TeamAbbrev'][qbid] and df['Position'][i] in ('WR', 'TE', 'RB'))] + [-2*player_vars[qbid]]) >= 0
                 prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['opponent'][qbid] and df['Position'][i] in ('WR'))] + [-1*player_vars[qbid]]) >= 0
      
         for dstid in player_ids:
