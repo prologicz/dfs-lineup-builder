@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from pulp import *
+import numpy as np
 
 
 
@@ -11,9 +12,15 @@ def lineupBuilder (thisWeeksFile):
     #Ingest and format file
     #TODO clean up file formatting
     df = pd.read_csv(os.path.join(ROOT_DIR, 'input', thisWeeksFile))
-    df[['team', 'gameTime']] = df['Game Info'].str.split('@', expand=True)
-    df[['opp', 'date', 'time', 'timezone']] = df['gameTime'].str.split(' ', expand=True); 
+    df[['away', 'gametime']] = df['Game Info'].str.split('@', expand=True)
+    df[['home', 'date', 'time', 'timezone']] = df['gametime'].str.split(' ', expand=True);
+
+    conditions = [df.TeamAbbrev.eq(df.away), df.TeamAbbrev.eq(df.home)]
+    choices = [df['home'], df['away']]
+    df['opponent'] = np.select(conditions, choices)
+
     df.set_index('Name')
+    df.to_csv('test.csv')
     
     #Variables
     lineup = 1 #Lineup Counter
@@ -36,7 +43,7 @@ def lineupBuilder (thisWeeksFile):
         for qbid in player_ids:
             if df['Position'][qbid] == 'QB':
                 prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['TeamAbbrev'][qbid] and df['Position'][i] in ('WR', 'TE', 'RB'))] + [-5*player_vars[qbid]]) >= 0
-                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['opp'][qbid] and df['Position'][i] in ('WR'))] + [-1*player_vars[qbid]]) >= 0
+                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['opponent'][qbid] and df['Position'][i] in ('WR'))] + [-1*player_vars[qbid]]) >= 0
      
         # Constrained by position counts including FLEX
         prob += lpSum([player_vars[i] for i in player_ids if df['Position'][i] == 'QB']) == 1
@@ -81,4 +88,4 @@ def lineupBuilder (thisWeeksFile):
         print(solutions)
 
 
-lineupBuilder('DKSalaries_09112022.csv')    
+lineupBuilder('DKSalaries.csv')    
