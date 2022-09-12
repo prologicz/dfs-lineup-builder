@@ -67,6 +67,14 @@ def lineupBuilder (thisWeeksFile):
         prob.solve(PULP_CBC_CMD(msg=0))
         solution_status = LpStatus[prob.status]
         lineup_score =  value(prob.objective)
+        solution = []
+        for v in prob.variables():
+            if v.varValue != 0.0:
+                solution.append(int(v.name.removeprefix('player_')))
+                
+        print(solution)
+
+        
 
         #Return lineup solutions in dataframe
         current_lineup = []
@@ -88,7 +96,7 @@ def lineupBuilder (thisWeeksFile):
         #Output solutions
         solutions[['player1', 'player2','player3', 'player4', 'player5','player6','player7','player8','player9']] = pd.DataFrame(solutions.Lineup.tolist())
         solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile[:-4] + '_lineups.csv'))
-        print(solutions)
+        # print(solutions)
 
 
 lineupBuilder('DKSalaries.csv')    
