@@ -1,7 +1,25 @@
 import pandas as pd
-import numpy as np
 import os
+from pulp import *
+import numpy as np
 
+
+def createInitialDF (thisWeeksFile):
+
+    ROOT_DIR = os.path.dirname(__file__)
+
+    #Ingest and format file
+    #TODO clean up file formatting
+    df = pd.read_csv(os.path.join(ROOT_DIR, 'input', thisWeeksFile))
+    df[['away', 'gametime']] = df['Game Info'].str.split('@', expand=True)
+    df[['home', 'date', 'time', 'timezone']] = df['gametime'].str.split(' ', expand=True)
+
+    conditions = [df.TeamAbbrev.eq(df.away), df.TeamAbbrev.eq(df.home)]
+    choices = [df['home'], df['away']]
+    df['opponent'] = np.select(conditions, choices)
+    df.set_index('Name')
+
+    return df
 
 def draftKingsSingleLineup(df, lineup_index):
 
@@ -69,6 +87,5 @@ def draftKingsAllLineups (df, solutions_index):
         all_lineups.reset_index
 
     return all_lineups
-
 
 
