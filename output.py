@@ -3,13 +3,13 @@ import numpy as np
 import os
 
 
-def draftKingsOutput(df, lineup_index):
+def draftKingsSingleLineup(df, lineup_index):
 
     lineup = df.iloc[lineup_index]
     lineup_list = list(zip(lineup['Position'], lineup['Name + ID']))
 
 
-    solution_df = pd.DataFrame(columns=['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
+
     solution_list = [0,0,0,0,0,0,0,0,0]
     
 
@@ -57,30 +57,18 @@ def draftKingsOutput(df, lineup_index):
             solution_list = [0,0,0,0,0,0,0,0,0]
             print('Position Count Mismatch.  Extra DST')
 
-    solution_df.loc[len(solution_df)] = solution_list
-    solution_df.reset_index
-    print(solution_df)
-    solution_df.to_csv('test.csv', index=False)
+    return solution_list
 
+def draftKingsAllLineups (df, solutions_index):
 
+    all_lineups = pd.DataFrame(columns=['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
+    for lineup_index in range(len(solutions_index)):
+        current_index = solutions_index[lineup_index]
+        current_lineup = draftKingsSingleLineup(df, current_index)
+        all_lineups.loc[len(all_lineups)] = current_lineup
+        all_lineups.reset_index
 
+    return all_lineups
 
-
-
-ROOT_DIR = os.path.dirname(__file__)
-df = pd.read_csv(os.path.join(ROOT_DIR, 'input', 'DKSalaries.csv'))
-df[['away', 'gametime']] = df['Game Info'].str.split('@', expand=True)
-df[['home', 'date', 'time', 'timezone']] = df['gametime'].str.split(' ', expand=True);
-
-conditions = [df.TeamAbbrev.eq(df.away), df.TeamAbbrev.eq(df.home)]
-choices = [df['home'], df['away']]
-df['opponent'] = np.select(conditions, choices)
-df.set_index('Name')
-
-
-
-
-lineup_index = [0, 10, 129, 163, 18, 28, 543, 79, 207]
-draftKingsOutput(df,lineup_index)
 
 

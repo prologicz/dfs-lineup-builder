@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from pulp import *
 import numpy as np
+from output import *
 
 
 
@@ -24,11 +25,11 @@ def lineupBuilder (thisWeeksFile):
     #Variables
     lineup = 1 #Lineup Counter
     score_check = 1000 #Initialize scoring threshold
-    solutions = pd.DataFrame() #Initialize solution dataframe
+    solutions = []
 
     
     #LP Optimzation loop, Modify while loop between lineup or scorecheck depending on requirements
-    while lineup < 50:
+    while lineup <= 5:
 
         player_ids = df.index
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')
@@ -71,32 +72,50 @@ def lineupBuilder (thisWeeksFile):
         for v in prob.variables():
             if v.varValue != 0.0:
                 solution.append(int(v.name.removeprefix('player_')))
-                
-        print(solution)
 
-        
-
-        #Return lineup solutions in dataframe
-        current_lineup = []
-        for v in prob.variables():
-            if v.varValue != 0.0:
-                if v.name.startswith('player_'):
-                    current_lineup.append(df.iat[int(v.name.removeprefix('player_')), df.columns.get_loc('Name + ID')])
-                else:
-                    current_lineup.append(df.iat[int(v.name.removeprefix('player_')), df.columns.get_loc('Name + ID')])
-        
-        solutions = solutions.append({"Lineup#": lineup,'Status': solution_status, 'Score': lineup_score, 'Lineup': current_lineup}, ignore_index=True)
-        
 
         #Update counters        
         total_score = value(prob.objective)
         lineup += 1
         score_check = total_score
+
+        #Output lineup        
+        solutions.append(solution)
+    
+    return solutions
+
+        # #Return lineup solutions in dataframe
+        # current_lineup = []
+        # for v in prob.variables():
+        #     if v.varValue != 0.0:
+        #         if v.name.startswith('player_'):
+        #             current_lineup.append(df.iat[int(v.name.removeprefix('player_')), df.columns.get_loc('Name + ID')])
+        #         else:
+        #             current_lineup.append(df.iat[int(v.name.removeprefix('player_')), df.columns.get_loc('Name + ID')])
         
-        #Output solutions
-        solutions[['player1', 'player2','player3', 'player4', 'player5','player6','player7','player8','player9']] = pd.DataFrame(solutions.Lineup.tolist())
-        solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile[:-4] + '_lineups.csv'))
-        # print(solutions)
+        # solutions = solutions.append({"Lineup#": lineup,'Status': solution_status, 'Score': lineup_score, 'Lineup': current_lineup}, ignore_index=True)
+        
+        # #Output solutions
+        # solutions[['player1', 'player2','player3', 'player4', 'player5','player6','player7','player8','player9']] = pd.DataFrame(solutions.Lineup.tolist())
+        # solutions.to_csv(os.path.join(ROOT_DIR, 'output', thisWeeksFile[:-4] + '_lineups.csv'))
+        # # print(solutions)
 
 
-lineupBuilder('DKSalaries.csv')    
+
+#Establish root directory
+ROOT_DIR = os.path.dirname(__file__)
+
+#Ingest and format file
+#TODO clean up file formatting
+df = pd.read_csv(os.path.join(ROOT_DIR, 'input', 'DKSalaries.csv'))
+df[['away', 'gametime']] = df['Game Info'].str.split('@', expand=True)
+df[['home', 'date', 'time', 'timezone']] = df['gametime'].str.split(' ', expand=True);
+
+conditions = [df.TeamAbbrev.eq(df.away), df.TeamAbbrev.eq(df.home)]
+choices = [df['home'], df['away']]
+df['opponent'] = np.select(conditions, choices)
+df.set_index('Name')
+
+solutions = lineupBuilder('DKSalaries.csv') 
+lineups = draftKingsAllLineups(df, solutions)
+print(lineups)
