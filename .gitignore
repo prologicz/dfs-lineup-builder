@@ -3,3 +3,4 @@ output/
 test.py
 test.csv
 .gitignore
+__pycache__
