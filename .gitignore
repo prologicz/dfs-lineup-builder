@@ -2,4 +2,7 @@ input/
 output/
 test.py
 test.csv
+ 4-show-the-list-of-players-across-all-lineups-and-percent-of-lineups-they-are-included
+.gitignore
 __pycache__
+main
