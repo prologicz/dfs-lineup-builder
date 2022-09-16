@@ -1,3 +1,4 @@
+from xml.etree.ElementInclude import include
 import pandas as pd
 import os
 from pulp import *
@@ -21,7 +22,7 @@ def createInitialDF (thisWeeksFile):
 
     return df
 
-def draftKingsSingleLineup(df, lineup_index):
+def singleLineupPlayers(df, lineup_index):
 
     lineup = df.iloc[lineup_index]
     lineup_list = list(zip(lineup['Position'], lineup['Name + ID']))
@@ -77,15 +78,12 @@ def draftKingsSingleLineup(df, lineup_index):
 
     return solution_list
 
-def draftKingsAllLineups (df, solutions_index):
+def singleLineupScore (df, lineup_index):
+    lineup = df.iloc[lineup_index]
+    lineup_list = list(lineup['AvgPointsPerGame'])
+    return sum(lineup_list)
 
-    all_lineups = pd.DataFrame(columns=['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
-    for lineup_index in range(len(solutions_index)):
-        current_index = solutions_index[lineup_index]
-        current_lineup = draftKingsSingleLineup(df, current_index)
-        all_lineups.loc[len(all_lineups)] = current_lineup
-        all_lineups.reset_index
-
-    return all_lineups
-
-
+def singleLineupSalary (df, lineup_index):
+    lineup = df.iloc[lineup_index]
+    lineup_list = list(lineup['Salary'])
+    return sum(lineup_list)
