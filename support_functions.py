@@ -87,3 +87,19 @@ def singleLineupSalary (df, lineup_index):
     lineup = df.iloc[lineup_index]
     lineup_list = list(lineup['Salary'])
     return sum(lineup_list)
+
+
+def uploadInitalFile (uploadedFile):
+
+    #Ingest and format file
+    #TODO clean up file formatting
+
+    uploadedFile[['away', 'gametime']] = uploadedFile['Game Info'].str.split('@', expand=True)
+    uploadedFile[['home', 'date', 'time', 'timezone']] = uploadedFile['gametime'].str.split(' ', expand=True)
+
+    conditions = [uploadedFile.TeamAbbrev.eq(uploadedFile.away), uploadedFile.TeamAbbrev.eq(uploadedFile.home)]
+    choices = [uploadedFile['home'], uploadedFile['away']]
+    uploadedFile['opponent'] = np.select(conditions, choices)
+    uploadedFile.set_index('Name')
+
+    return uploadedFile
