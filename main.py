@@ -1,6 +1,6 @@
 from support_functions import *
 from linuep_builder import *
-from analytics import *
+from reports import *
 import pandas as pd
 import datetime
 
@@ -11,6 +11,7 @@ df = createInitialDF('DKSalaries.csv')
 solutions = lineupBuilder(df) 
 lineups_file = draftKingsAllLineups(df, solutions)
 lineup_percentages = usagePercentage(df, solutions)
+print(solutions)
 
 
 ROOT_DIR = os.path.dirname(__file__)
