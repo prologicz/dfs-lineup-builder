@@ -22,8 +22,17 @@ def usagePercentage (df, index):
     usagePercent['counts'] = usagePercent.sum(axis=1)
     usagePercent['percent of lineups'] = (usagePercent['counts'] / lineupCount)
     usagePercent = usagePercent.drop(columns = ['DST','FLEX','QB','RB','WR','TE','counts'])
-    print(usagePercent)
     return usagePercent
 
-
-
+def summaryReport (df, solutions_index):
+    summary = pd.DataFrame(columns=['Projected Score','Salary','QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
+    for lineup_index in range(len(solutions_index)):
+        current_index = solutions_index[lineup_index]
+        current_lineup = singleLineupPlayers(df, current_index)
+        lineup_score = singleLineupScore(df, current_index)
+        lineup_salary = singleLineupSalary(df, current_index)
+        current_lineup.insert(0, lineup_salary)
+        current_lineup.insert(0, lineup_score)
+        summary.loc[len(summary)] = current_lineup
+        summary.reset_index
+    return summary

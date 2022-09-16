@@ -81,17 +81,9 @@ def singleLineupPlayers(df, lineup_index):
 def singleLineupScore (df, lineup_index):
     lineup = df.iloc[lineup_index]
     lineup_list = list(lineup['AvgPointsPerGame'])
-    print(sum(lineup_list))
     return sum(lineup_list)
 
 def singleLineupSalary (df, lineup_index):
     lineup = df.iloc[lineup_index]
     lineup_list = list(lineup['Salary'])
-    print(sum(lineup_list))
     return sum(lineup_list)
-
-
-
-df = createInitialDF('DKSalaries.csv')
-index = [0, 105, 13, 163, 18, 28, 543, 79, 808]
-singleLineupSalary(df, index)
