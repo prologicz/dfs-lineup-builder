@@ -12,12 +12,12 @@ def createInitialDF (thisWeeksFile):
     #Ingest and format file
     #TODO clean up file formatting
     df = pd.read_csv(os.path.join(ROOT_DIR, 'input', thisWeeksFile))
-    df[['away', 'gametime']] = df['Game Info'].str.split('@', expand=True)
-    df[['home', 'date', 'time', 'timezone']] = df['gametime'].str.split(' ', expand=True)
+    df[['Away', 'Gametime']] = df['Game Info'].str.split('@', expand=True)
+    df[['Home', 'Date', 'Time', 'Timezone']] = df['Gametime'].str.split(' ', expand=True)
 
-    conditions = [df.TeamAbbrev.eq(df.away), df.TeamAbbrev.eq(df.home)]
-    choices = [df['home'], df['away']]
-    df['opponent'] = np.select(conditions, choices)
+    conditions = [df.TeamAbbrev.eq(df.Away), df.TeamAbbrev.eq(df.Home)]
+    choices = [df['Home'], df['Away']]
+    df['Opponent'] = np.select(conditions, choices)
     df.set_index('Name')
 
     return df
@@ -94,12 +94,12 @@ def uploadInitalFile (uploadedFile):
     #Ingest and format file
     #TODO clean up file formatting
 
-    uploadedFile[['away', 'gametime']] = uploadedFile['Game Info'].str.split('@', expand=True)
-    uploadedFile[['home', 'date', 'time', 'timezone']] = uploadedFile['gametime'].str.split(' ', expand=True)
+    uploadedFile[['Away', 'Gametime']] = uploadedFile['Game Info'].str.split('@', expand=True)
+    uploadedFile[['Home', 'Date', 'Time', 'Timezone']] = uploadedFile['Gametime'].str.split(' ', expand=True)
 
-    conditions = [uploadedFile.TeamAbbrev.eq(uploadedFile.away), uploadedFile.TeamAbbrev.eq(uploadedFile.home)]
-    choices = [uploadedFile['home'], uploadedFile['away']]
-    uploadedFile['opponent'] = np.select(conditions, choices)
+    conditions = [uploadedFile.TeamAbbrev.eq(uploadedFile.Away), uploadedFile.TeamAbbrev.eq(uploadedFile.Home)]
+    choices = [uploadedFile['Home'], uploadedFile['Away']]
+    uploadedFile['Opponent'] = np.select(conditions, choices)
     uploadedFile.set_index('Name')
 
     return uploadedFile

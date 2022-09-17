@@ -24,11 +24,11 @@ def lineupBuilder (df):
         for qbid in player_ids:
             if df['Position'][qbid] == 'QB':
                 prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['TeamAbbrev'][qbid] and df['Position'][i] in ('WR', 'TE', 'RB'))] + [-2*player_vars[qbid]]) >= 0
-                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['opponent'][qbid] and df['Position'][i] in ('WR'))] + [-1*player_vars[qbid]]) >= 0
+                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['Opponent'][qbid] and df['Position'][i] in ('WR'))] + [-1*player_vars[qbid]]) >= 0
      
         for dstid in player_ids:
             if df['Position'][dstid] == 'DST':
-                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['opponent'][dstid] and df['Position'][i] in ('RB', 'QB'))] + [8*player_vars[dstid]]) <= 8
+                prob += lpSum([player_vars[i] for i in player_ids if (df['TeamAbbrev'][i] == df['Opponent'][dstid] and df['Position'][i] in ('RB', 'QB'))] + [8*player_vars[dstid]]) <= 8
 
         # Constrained by position counts including FLEX
         prob += lpSum([player_vars[i] for i in player_ids if df['Position'][i] == 'QB']) == 1
