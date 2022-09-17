@@ -4,6 +4,8 @@ from support_functions import *
 from st_aggrid import *
 
 st.title('Fantasy Football Optimizer')
+
+st.sidebar.title('Data Ingest')
 uploaded_file = st.sidebar.file_uploader("Choose a file")
 
 
@@ -65,9 +67,10 @@ else:
     st.subheader('Data Preview')
 
     try: 
-        AgGrid(data.head(5), fit_columns_on_grid_load = True)
+        AgGrid(data, fit_columns_on_grid_load = True)
     except:
         st.write('issue')
+
 
 
 
