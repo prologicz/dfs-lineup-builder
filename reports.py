@@ -5,7 +5,7 @@ import pandas as pd
 
 def draftKingsAllLineups (df, solutions_index):
 
-    all_lineups = pd.DataFrame(columns=['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
+    all_lineups = pd.DataFrame(columns=['QB','RB1','RB2','WR1','WR2','WR3','TE','FLEX','DST'])
     for lineup_index in range(len(solutions_index)):
         current_index = solutions_index[lineup_index]
         current_lineup = singleLineupPlayers(df, current_index)

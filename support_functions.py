@@ -25,7 +25,7 @@ def createInitialDF (thisWeeksFile):
 def singleLineupPlayers(df, lineup_index):
 
     lineup = df.iloc[lineup_index]
-    lineup_list = list(zip(lineup['Position'], lineup['Name + ID']))
+    lineup_list = list(zip(lineup['position'], lineup['key']))
 
 
 

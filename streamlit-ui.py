@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 from support_functions import *
 from st_aggrid import *
+from linuep_builder import *
+from reports import *
 
 st.title('Fantasy Football Optimizer')
 
@@ -69,11 +71,18 @@ else:
     st.subheader('Data Preview')
 
     try: 
-        AgGrid(data, fit_columns_on_grid_load = True)
+        AgGrid(data.head(5), fit_columns_on_grid_load = True)
     except:
         st.write('issue')
 
 
+    try:
+        st.subheader('Lineup Solutions')
+        solutions = lineupBuilder(data) 
+        lineups_file = draftKingsAllLineups(data, solutions)
+        AgGrid(lineups_file, fit_columns_on_grid_load= True)
+    except:
+        st.warning('Column Mapping Incomplete')
 
 
 
