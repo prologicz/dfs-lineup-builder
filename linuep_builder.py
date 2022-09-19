@@ -10,7 +10,7 @@ def lineupBuilder (df):
 
     
     #LP Optimzation loop, Modify while loop between lineup or scorecheck depending on requirements
-    while lineup <= 50:
+    while lineup <= 5:
 
         player_ids = df.index
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')

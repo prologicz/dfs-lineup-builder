@@ -78,8 +78,8 @@ else:
 
     try:
         solutions = lineupBuilder(data) 
-        lineups_file = draftKingsAllLineups(data, solutions)
-        st.session_state['lineups_file'] = lineups_file
+        summary_report = summaryReport(data, solutions)
+        st.session_state['summary_report'] = summary_report
     except:
         st.write('')
 

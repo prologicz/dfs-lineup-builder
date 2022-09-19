@@ -25,7 +25,7 @@ def usagePercentage (df, index):
     return usagePercent
 
 def summaryReport (df, solutions_index):
-    summary = pd.DataFrame(columns=['Projected Score','Salary','QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
+    summary = pd.DataFrame(columns=['Projected Score','Salary','QB','RB1','RB2','WR1','WR2','WR3','TE','FLEX','DST'])
     for lineup_index in range(len(solutions_index)):
         current_index = solutions_index[lineup_index]
         current_lineup = singleLineupPlayers(df, current_index)
