@@ -64,7 +64,7 @@ else:
                                         col_to_change_opponent: new_col_name_opponent})
             remove_data_headers = [new_col_name_key, new_col_name_name, new_col_name_position, new_col_name_salary, new_col_name_points, new_col_name_team, new_col_name_opponent]
             data = data.drop(columns = [col for col in data if col not in remove_data_headers])
-
+            st.session_state['data'] = data
     except:
         st.write('issue')
 
@@ -77,9 +77,8 @@ else:
 
 
     try:
-        solutions = lineupBuilder(data) 
-        summary_report = summaryReport(data, solutions)
-        st.session_state['summary_report'] = summary_report
+        solutions = lineupBuilder(data)
+        st.session_state['solutions'] = solutions
     except:
         st.write('')
 
