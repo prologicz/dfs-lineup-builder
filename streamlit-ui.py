@@ -60,6 +60,8 @@ else:
                                         col_to_change_points: new_col_name_points,
                                         col_to_change_team: new_col_name_team,
                                         col_to_change_opponent: new_col_name_opponent})
+            remove_data_headers = [new_col_name_key, new_col_name_name, new_col_name_position, new_col_name_salary, new_col_name_points, new_col_name_team, new_col_name_opponent]
+            data = data.drop(columns = [col for col in data if col not in remove_data_headers])
 
     except:
         st.write('issue')

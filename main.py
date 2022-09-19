@@ -5,9 +5,9 @@ import pandas as pd
 import datetime
 
 
-currentWeek = 1
+currentWeek = 2
 
-df = createInitialDF('DKSalaries.csv')
+df = createInitialDF('DKSalariesWeek2_cleaned_qbset2.csv')
 solutions = lineupBuilder(df) 
 lineups_file = draftKingsAllLineups(df, solutions)
 lineup_percentages = usagePercentage(df, solutions)
