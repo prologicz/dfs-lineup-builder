@@ -1,3 +1,5 @@
 pandas
 pulp
 numpy
+streamlit
+streamlit-aggrid
