@@ -80,12 +80,12 @@ def singleLineupPlayers(df, lineup_index):
 
 def singleLineupScore (df, lineup_index):
     lineup = df.iloc[lineup_index]
-    lineup_list = list(lineup['AvgPointsPerGame'])
+    lineup_list = list(lineup['points'])
     return sum(lineup_list)
 
 def singleLineupSalary (df, lineup_index):
     lineup = df.iloc[lineup_index]
-    lineup_list = list(lineup['Salary'])
+    lineup_list = list(lineup['salary'])
     return sum(lineup_list)
 
 
