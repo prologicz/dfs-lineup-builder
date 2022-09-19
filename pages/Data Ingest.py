@@ -77,12 +77,11 @@ else:
 
 
     try:
-        st.subheader('Lineup Solutions')
         solutions = lineupBuilder(data) 
         lineups_file = draftKingsAllLineups(data, solutions)
-        AgGrid(lineups_file, fit_columns_on_grid_load= True)
+        st.session_state['lineups_file'] = lineups_file
     except:
-        st.warning('Column Mapping Incomplete')
+        st.write('')
 
 
 
