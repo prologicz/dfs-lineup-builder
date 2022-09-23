@@ -77,7 +77,7 @@ else:
 
 
     try:
-        solutions = lineupBuilder(data)
+        solutions = lineupBuilder(data, 15)
         st.session_state['solutions'] = solutions
     except:
         st.write('')

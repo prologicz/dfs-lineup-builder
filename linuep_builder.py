@@ -1,7 +1,7 @@
 from pulp import *
 
 
-def lineupBuilder (df):
+def lineupBuilder (df, numberOfLineups):
 
     #Variables
     lineup = 1 #Lineup Counter
@@ -10,7 +10,7 @@ def lineupBuilder (df):
 
     
     #LP Optimzation loop, Modify while loop between lineup or scorecheck depending on requirements
-    while lineup <= 5:
+    while lineup <= numberOfLineups:
 
         player_ids = df.index
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')
