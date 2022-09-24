@@ -86,7 +86,7 @@ st.subheader('Remap Data Preview')
 try: 
     AgGrid(st.session_state['remap_data'].head(10), fit_columns_on_grid_load = True)
 except:
-    st.info('Please Set Column Mappings')
+    st.info('Please Map Columns')
 
 
 if 'remap_data' in st.session_state:
