@@ -65,11 +65,9 @@ def lineupBuilder (df, numberOfLineups):
         #Output lineup        
         solutions.append(solution)
 
-        print(solutions)
         
         my_bar.progress((lineup - 1)/numberOfLineups)
-        print(lineup/numberOfLineups)
-    
+
     return solutions
 
         # #Return lineup solutions in dataframe
