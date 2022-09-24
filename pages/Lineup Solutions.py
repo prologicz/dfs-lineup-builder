@@ -11,10 +11,10 @@ with open('style.css') as f:
 if 'solutions' not in st.session_state:
     st.info('File Ingest has not been completed')
 else:
-    summary_report = summaryReport(st.session_state['data'], st.session_state['solutions'])
+    summary_report = summaryReport(st.session_state['remap_data'], st.session_state['solutions'])
     AgGrid(summary_report, fit_columns_on_grid_load = True)
 
-    lineups = draftKingsAllLineups(st.session_state['data'], st.session_state['solutions'])
+    lineups = draftKingsAllLineups(st.session_state['remap_data'], st.session_state['solutions'])
     csv = lineups.to_csv(index=False)
 
     st.sidebar.title('Data Download')
