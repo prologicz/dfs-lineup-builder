@@ -26,7 +26,7 @@ except:
 
 st.subheader('Ingest Data Preview')
 try:
-    ingest_data = uploadInitalFile(st.session_state['df'])
+    ingest_data = st.session_state['df']
     st.session_state['ingest_data'] = ingest_data
     AgGrid(st.session_state['ingest_data'].head(10), fit_columns_on_grid_load = True)
 
@@ -63,15 +63,14 @@ try:
     submit_button = st.sidebar.button(label='Map Columns')
 
     if submit_button:
-        remap_data = ingest_data.rename(columns={col_to_change_key: new_col_name_key, 
-                                    col_to_change_name: new_col_name_name,
-                                    col_to_change_position: new_col_name_position,
-                                    col_to_change_salary: new_col_name_salary,
-                                    col_to_change_points: new_col_name_points,
-                                    col_to_change_team: new_col_name_team,
-                                    col_to_change_opponent: new_col_name_opponent})
-        remove_remap_data_headers = [new_col_name_key, new_col_name_name, new_col_name_position, new_col_name_salary, new_col_name_points, new_col_name_team, new_col_name_opponent]
-        remap_data = remap_data.drop(columns = [col for col in remap_data if col not in remove_remap_data_headers])
+        remap_data = pd.DataFrame()
+        remap_data[new_col_name_key] = ingest_data[col_to_change_key]
+        remap_data[new_col_name_name] = ingest_data[col_to_change_name]
+        remap_data[new_col_name_position] = ingest_data[col_to_change_position]
+        remap_data[new_col_name_salary] = ingest_data[col_to_change_salary]
+        remap_data[new_col_name_points] = ingest_data[col_to_change_points]
+        remap_data[new_col_name_team] = ingest_data[col_to_change_team]
+        remap_data[new_col_name_opponent] = ingest_data[col_to_change_opponent]
         st.session_state['remap_data'] = remap_data
 except:
     st.write('')
@@ -93,7 +92,7 @@ if 'remap_data' in st.session_state:
     run_button = st.button('Generate Lineups', key='generateLineups')
     if run_button:
         with st.spinner('Generating Lineups'):
-            solutions = lineupBuilder(st.session_state['remap_data'], 50)
+            solutions = lineupBuilder(st.session_state['remap_data'], 10)
             st.session_state['solutions'] = solutions
 
 
