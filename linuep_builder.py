@@ -1,16 +1,18 @@
 from pulp import *
+import streamlit as st
 
 
-def lineupBuilder (df):
+def lineupBuilder (df, numberOfLineups):
 
     #Variables
     lineup = 1 #Lineup Counter
     score_check = 1000 #Initialize scoring threshold
     solutions = []
+    my_bar = st.progress(0)
 
     
     #LP Optimzation loop, Modify while loop between lineup or scorecheck depending on requirements
-    while lineup <= 5:
+    while lineup <= numberOfLineups:
 
         player_ids = df.index
         player_vars = LpVariable.dicts('player', player_ids, cat = 'Binary')
@@ -62,6 +64,11 @@ def lineupBuilder (df):
 
         #Output lineup        
         solutions.append(solution)
+
+        print(solutions)
+        
+        my_bar.progress((lineup - 1)/numberOfLineups)
+        print(lineup/numberOfLineups)
     
     return solutions
 

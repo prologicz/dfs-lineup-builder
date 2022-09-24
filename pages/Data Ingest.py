@@ -18,6 +18,7 @@ if uploaded_file is None:
     st.info(' Please Upload File')
 
 else:
+    st.session_state['uploaded_file'] = uploaded_file
     df = pd.read_csv(uploaded_file)
 
     try:
@@ -77,10 +78,17 @@ else:
 
 
     try:
-        solutions = lineupBuilder(data)
-        st.session_state['solutions'] = solutions
+        with st.spinner('Calculating Lineups'):
+            solutions = lineupBuilder(data, 100)
+            st.session_state['solutions'] = solutions
+            print(solutions)
+        st.success('Done!')
+
+
     except:
-        st.write('')
+        st.write('Lineups Coul No Be Generated')
+
+
 
 
 
