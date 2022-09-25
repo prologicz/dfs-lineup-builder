@@ -5,7 +5,7 @@ import pandas as pd
 
 def draftKingsAllLineups (df, solutions_index):
 
-    all_lineups = pd.DataFrame(columns=['QB','RB1','RB2','WR1','WR2','WR3','TE','FLEX','DST'])
+    all_lineups = pd.DataFrame(columns=['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'])
     for lineup_index in range(len(solutions_index)):
         current_index = solutions_index[lineup_index]
         current_lineup = singleLineupPlayers(df, current_index)
@@ -20,7 +20,7 @@ def usagePercentage (df, index):
     usagePercent = lineups.melt(var_name='columns', value_name='player')
     usagePercent = pd.crosstab(index=usagePercent['player'], columns=usagePercent['columns'])
     usagePercent['counts'] = usagePercent.sum(axis=1)
-    usagePercent['percent of lineups'] = (usagePercent['counts'] / lineupCount)
+    usagePercent['percent of lineups'] = round(((usagePercent['counts'] / lineupCount) * 100 ),2)
     usagePercent = usagePercent.drop(columns = ['DST','FLEX','QB','RB','WR','TE','counts'])
     return usagePercent
 

@@ -7,8 +7,8 @@ import datetime
 
 currentWeek = 2
 
-df = createInitialDF('DKSalariesWeek2_cleaned_qbset2.csv')
-solutions = lineupBuilder(df) 
+df = pd.read_csv('DKCleanedTestData.csv')
+solutions = lineupBuilder(df, 10) 
 lineups_file = draftKingsAllLineups(df, solutions)
 lineup_percentages = usagePercentage(df, solutions)
 lineup_summary = summaryReport(df,solutions)

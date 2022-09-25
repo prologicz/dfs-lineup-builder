@@ -26,7 +26,7 @@ except:
 
 st.subheader('Ingest Data Preview')
 try:
-    ingest_data = st.session_state['df']
+    ingest_data = uploadInitalFile(st.session_state['df'])
     st.session_state['ingest_data'] = ingest_data
     AgGrid(st.session_state['ingest_data'].head(10), fit_columns_on_grid_load = True)
 
@@ -77,13 +77,11 @@ except:
 
 
 
-
-
-
 st.subheader('Remap Data Preview')
 
 try: 
     AgGrid(st.session_state['remap_data'].head(10), fit_columns_on_grid_load = True)
+
 except:
     st.info('Please Map Columns')
 
