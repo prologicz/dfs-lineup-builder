@@ -3,3 +3,4 @@ pulp
 numpy
 streamlit
 streamlit-aggrid
+streamlit-extras

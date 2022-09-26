@@ -10,7 +10,7 @@ with open('style.css') as f:
 
 
 if 'solutions' not in st.session_state:
-    st.info('File Ingest has not been completed')
+    st.info('Lineup Generator Not Run')
 else:
     usePercent = usagePercentage(st.session_state['remap_data'], st.session_state['solutions'])
     usePercent = pd.merge(left=usePercent, right= st.session_state['remap_data'], left_on=usePercent.index, right_on='key', how='left')
