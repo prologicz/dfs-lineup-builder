@@ -15,6 +15,7 @@ if 'remap_data' in st.session_state:
         with st.spinner('Generating Lineups'):
             solutions = lineupBuilder(st.session_state['remap_data'], numberOfLineups)
             st.session_state['solutions'] = solutions
+            switch_page('Lineup Solutions')
 
 else:
     st.info('Data Ingest Not Complete')
