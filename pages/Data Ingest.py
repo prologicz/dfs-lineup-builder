@@ -4,6 +4,7 @@ from support_functions import *
 from st_aggrid import *
 from linuep_builder import *
 from reports import *
+from streamlit_extras.switch_page_button import switch_page
 
 st.title('Fantasy Football Optimizer')
 
@@ -87,11 +88,9 @@ except:
 
 
 if 'remap_data' in st.session_state:
-    run_button = st.button('Generate Lineups', key='generateLineups')
-    if run_button:
-        with st.spinner('Generating Lineups'):
-            solutions = lineupBuilder(st.session_state['remap_data'], 10)
-            st.session_state['solutions'] = solutions
+    lineupConfigurationButton = st.button('Generator Settings >>')
+    if lineupConfigurationButton:
+        switch_page('Generator Settings')
 
 
 
