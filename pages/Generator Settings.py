@@ -6,6 +6,9 @@ st.title('Fantasy Football Optimizer')
 
 st.subheader('Generator Settings')
 
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
 
 
 if 'remap_data' in st.session_state:
