@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+from st_aggrid import *
 from linuep_builder import *
 from streamlit_extras.switch_page_button import switch_page
 
@@ -13,10 +16,35 @@ with open('style.css') as f:
 
 if 'remap_data' in st.session_state:
     numberOfLineups = st.slider('Number of lineups:', min_value=1, max_value=150, value=20)
+
+    remap_data = pd.DataFrame(st.session_state['remap_data'])
+    quarterbacks = remap_data[remap_data['position'] == 'QB']
+    gd = GridOptionsBuilder.from_dataframe(quarterbacks)
+    gd.configure_selection(selection_mode='multiple', use_checkbox=True)
+    gridoptions = gd.build()
+
+    grid_table = AgGrid(quarterbacks, gridOptions=gridoptions,
+                    update_mode=GridUpdateMode.SELECTION_CHANGED)
+
+
+    selected_row = grid_table['selected_rows']
+    qb_selections = []
+
+    for row in range(len(selected_row)):
+        qb = selected_row[row]['key']
+        qb_selections.append(qb)
+    
+    final_quarterbacks = quarterbacks[quarterbacks['key'].isin(qb_selections)]
+    remap_data = remap_data.drop(remap_data[remap_data.position == 'QB'].index)
+    remap_data = remap_data.append(final_quarterbacks)
+
+
+
+
     run_button = st.button('Generate Lineups', key='generateLineups')
     if run_button:
         with st.spinner('Generating Lineups'):
-            solutions = lineupBuilder(st.session_state['remap_data'], numberOfLineups)
+            solutions = lineupBuilder(remap_data, numberOfLineups)
             st.session_state['solutions'] = solutions
             switch_page('Lineup Solutions')
 
