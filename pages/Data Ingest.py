@@ -12,7 +12,7 @@ st.sidebar.title('File Upload')
 uploaded_file = st.sidebar.file_uploader("")
 
 
-with open('style.css') as f:
+with open('./styles/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
