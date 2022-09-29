@@ -15,8 +15,11 @@ with open('style.css') as f:
 
 
 if 'remap_data' in st.session_state:
-    numberOfLineups = st.slider('Number of lineups:', min_value=1, max_value=150, value=20)
+    st.subheader('Select Number of Lineups')
+    numberOfLineups = st.slider('Numer Of Lineups', min_value=1, max_value=150, value=20, label_visibility='collapsed')
 
+    st.subheader('Select QBs For Stacks')
+    st.write('If specific stacks are not required, no selection should be made')
     remap_data = pd.DataFrame(st.session_state['remap_data'])
     quarterbacks = remap_data[remap_data['position'] == 'QB']
     gd = GridOptionsBuilder.from_dataframe(quarterbacks)
@@ -24,7 +27,7 @@ if 'remap_data' in st.session_state:
     gridoptions = gd.build()
 
     grid_table = AgGrid(quarterbacks, gridOptions=gridoptions,
-                    update_mode=GridUpdateMode.SELECTION_CHANGED)
+                    update_mode=GridUpdateMode.SELECTION_CHANGED, fit_columns_on_grid_load = True)
 
 
     selected_row = grid_table['selected_rows']
@@ -34,10 +37,10 @@ if 'remap_data' in st.session_state:
         qb = selected_row[row]['key']
         qb_selections.append(qb)
     
-    final_quarterbacks = quarterbacks[quarterbacks['key'].isin(qb_selections)]
-    remap_data = remap_data.drop(remap_data[remap_data.position == 'QB'].index)
-    remap_data = remap_data.append(final_quarterbacks)
-
+    if (len(qb_selections) > 0):
+        final_quarterbacks = quarterbacks[quarterbacks['key'].isin(qb_selections)]
+        remap_data = remap_data.drop(remap_data[remap_data.position == 'QB'].index)
+        remap_data = remap_data.append(final_quarterbacks)
 
 
 
